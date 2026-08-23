@@ -3,7 +3,8 @@ import sqlite3
 import os
 
 script_path = os.path.abspath(__file__)
-os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
+# os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
+# commented out for Nextflow; when run outside of Nextflow, assume you're at the repository root
 
 connection = sqlite3.connect("patient_data.db") # database must be in the repository root
 cursor = connection.cursor()

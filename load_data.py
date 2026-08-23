@@ -3,7 +3,8 @@ import sqlite3
 import os
 
 script_path = os.path.abspath(__file__)
-os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
+# os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
+# commented out for Nextflow; when run outside of Nextflow, assume you're at the repository root
 
 connection = sqlite3.connect("patient_data.db") # must be located in the repository root
 cursor = connection.cursor()
@@ -34,13 +35,13 @@ cursor.execute(
 """
 )
 
-chunks = pd.read_csv("data/cell-count.csv", chunksize=10000)
+chunks = pd.read_csv(f"{os.path.dirname(script_path)}/data/cell-count.csv", chunksize=10000)
 
 print("Loading data into database...")
 for df in chunks:
     print(f"Processing chunk with shape {df.shape}")
     df.to_sql("metadata", connection, if_exists="append", index=False)
-print("Done writing to data/patient_data.db")
+print("Done writing to patient_data.db")
 
 connection.commit()
 connection.close()

@@ -2,35 +2,46 @@
 # library(DBI)
 # library(RSQLite)
 
-# Source - https://stackoverflow.com/a/55322344
-# Posted by Juan Bernabe
-# Retrieved 2026-08-23, License - CC BY-SA 4.0
-
 library(rstatix)
 library(tidyverse)
 theme_set(theme_classic())
 
-getCurrentFileLocation <-  function()
-{
-  this_file <- commandArgs() %>% 
-    tibble::enframe(name = NULL) %>%
-    tidyr::separate(col=value, into=c("key", "value"), sep="=", fill='right') %>%
-    dplyr::filter(key == "--file") %>%
-    dplyr::pull(value)
-  if (length(this_file)==0)
-  {
-    this_file <- rstudioapi::getSourceEditorContext()$path
+# Get the directory of the currently executing script
+get_script_dir <- function() {
+  # When sourced, this gets the directory of the source file
+  cmd_args <- commandArgs(trailingOnly = FALSE)
+  file_arg <- "--file="
+  match_idx <- grep(file_arg, cmd_args)
+  if (length(match_idx) > 0) {
+    # Running as script
+    return(dirname(normalizePath(sub(file_arg, "", cmd_args[match_idx]))))
+  } else {
+    # Interactive or sourced
+    if (interactive()) {
+      return(getwd())
+    } else {
+      # Try to get from sys.frames
+      frame <- sys.frames()[[1]]
+      if (!is.null(frame$ofile)) {
+        return(dirname(normalizePath(frame$ofile)))
+      } else {
+        return(getwd())
+      }
+    }
   }
-  return(dirname(this_file))
 }
 
-parse_inputs <- function(inputdir, db_file) {
+parse_inputs <- function(inputdir, db_file, projDir_from_nextflow = NA) {
   # Use this wrapper if running in a Nextflow context; not necessary in the R Shiny context
   criteria_path <- paste(inputdir, "filtering_criteria.csv", sep="/")
   criteria_df <- read.csv(criteria_path, header = FALSE, sep = ",", col.names = c("name", "value"))
   
   # filter the database
-  scriptdir <- getCurrentFileLocation()
+  if (!is.na(projDir_from_nextflow)) {
+    scriptdir <- projDir_from_nextflow
+  } else {
+    scriptdir <- get_script_dir()
+  }
   source(paste(scriptdir, "filter_table.R", sep="/"))
   joined_df <- filter_table(criteria_df, db_file, join_with_summary=TRUE)
 }
@@ -47,7 +58,7 @@ make_boxplots <- function(df, outdir) {
   if (!dir.exists(outdir)) {
     dir.create(outdir)
   }
-  ggsave(outfile, width = 8, height = 4)
+  ggsave(outfile, width = 8, height = 4, create.dir = TRUE)
 }
 
 parametric_ok <- function(df, outdir, threshold=30, trust_CLT = TRUE, adjust = "bonferroni") {
