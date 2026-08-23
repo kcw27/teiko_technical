@@ -1,8 +1,27 @@
-library(dplyr)
-library(dbplyr)
-library(DBI)
-library(RSQLite)
-library(rlang)
+# library(dplyr)
+# library(dbplyr)
+# library(DBI)
+# library(RSQLite)
+# library(rlang)
+
+# Source - https://stackoverflow.com/a/55322344
+# Posted by Juan Bernabe
+# Retrieved 2026-08-23, License - CC BY-SA 4.0
+
+library(tidyverse)
+getCurrentFileLocation <-  function()
+{
+  this_file <- commandArgs() %>% 
+    tibble::enframe(name = NULL) %>%
+    tidyr::separate(col=value, into=c("key", "value"), sep="=", fill='right') %>%
+    dplyr::filter(key == "--file") %>%
+    dplyr::pull(value)
+  if (length(this_file)==0)
+  {
+    this_file <- rstudioapi::getSourceEditorContext()$path
+  }
+  return(dirname(this_file))
+}
 
 parse_inputs_and_analyze <- function(inputdir, db_file, outfile) {
   # Use this wrapper if running in a Nextflow context; not necessary in the R Shiny context
@@ -13,50 +32,15 @@ parse_inputs_and_analyze <- function(inputdir, db_file, outfile) {
   groupvar <- readLines(groupvar_path, n=1)
   
   # filter the database
+  scriptdir <- getCurrentFileLocation()
+  source(paste(scriptdir, "filter_table.R", sep="/"))
   df <- filter_table(criteria_df, db_file)
   
   # finally pass information to analyze_subset
   analyze_subset(df, groupvar, outfile)
 }
 
-filter_table <- function(criteria_df, db_file) {
-  connection <- dbConnect(RSQLite::SQLite(), dbname = db_file)
-  metadata_ref <- tbl(connection, "metadata")
-  
-  # get the type of each variable
-  col_info <- dbGetQuery(connection, "PRAGMA table_info(metadata)") |>
-    data.frame() |>
-    select(name, type)
-  
-  criteria_df <- left_join(criteria_df, col_info, by="name")
-  
-  # if the variable is numeric in the db, don't wrap it in single quotes
-  criteria_df <- criteria_df |>
-    mutate(filter_command = paste(name, 
-                                  ifelse(type=="INTEGER", 
-                                         value, 
-                                         paste0("'", value, "'")
-                                  ),
-                                  sep=" == "
-    )
-    )
-  
-  # filter by the criteria
-  filter_string <- criteria_df |> 
-    summarise(collapsed = paste(filter_command, collapse = "; ")) |> 
-    pull(collapsed)
-  
-  df <- metadata_ref |> 
-    filter(!!!parse_exprs(filter_string)) |> 
-    collect()
-  
-  dbDisconnect(connection)
-  
-  return(df)
-}
-
 analyze_subset <- function(df, groupvar, outfile=NA) {
-  
   summary_table <- df |>
     group_by(!!sym(groupvar)) |> 
     summarize(n=n())
