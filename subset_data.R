@@ -16,7 +16,6 @@ parse_inputs_and_analyze <- function(inputdir, db_file, outfile) {
   df <- filter_table(criteria_df, db_file)
   
   # finally pass information to analyze_subset
-  # analyze_subset(criteria_df, groupvar, metadata_db, outfile)
   analyze_subset(df, groupvar, outfile)
 }
 
@@ -56,41 +55,7 @@ filter_table <- function(criteria_df, db_file) {
   return(df)
 }
 
-
-# analyze_subset <- function(criteria_df, groupvar, metadata_db, outfile=NA) {
 analyze_subset <- function(df, groupvar, outfile=NA) {
-  # connection <- dbConnect(RSQLite::SQLite(), dbname = "C:/Users/achro/Documents/GitHub/teiko_technical/data/patient_data.db")
-  
-  # metadata_ref <- tbl(connection, "metadata")
-  
-  # # get the type of each variable
-  # col_info <- dbGetQuery(connection, "PRAGMA table_info(metadata)") |>
-  #   data.frame() |>
-  #   select(name, type)
-  # 
-  # criteria_df <- left_join(criteria_df, col_info, by="name")
-  # 
-  # # if the variable is numeric in the db, don't wrap it in single quotes
-  # criteria_df <- criteria_df |>
-  #   mutate(filter_command = paste(name, 
-  #                                 ifelse(type=="INTEGER", 
-  #                                        value, 
-  #                                        paste0("'", value, "'")
-  #                                        ),
-  #                                 sep=" == "
-  #                                 )
-  #          )
-  # 
-  # # filter by the criteria and get a summary table
-  # filter_string <- criteria_df |> 
-  #   summarise(collapsed = paste(filter_command, collapse = "; ")) |> 
-  #   pull(collapsed)
-  
-  # summary_table <- metadata_ref |> 
-  #   filter(!!!parse_exprs(filter_string)) |> 
-  #   group_by(!!sym(groupvar)) |> 
-  #   summarize(n=n()) |> 
-  #   collect()
   
   summary_table <- df |>
     group_by(!!sym(groupvar)) |> 
@@ -107,5 +72,4 @@ analyze_subset <- function(df, groupvar, outfile=NA) {
                   )
   }
   
-  # dbDisconnect(connection)
 }
