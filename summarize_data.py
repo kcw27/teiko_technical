@@ -5,7 +5,7 @@ import os
 script_path = os.path.abspath(__file__)
 os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
 
-connection = sqlite3.connect("data/patient_data.db")
+connection = sqlite3.connect("patient_data.db") # database must be in the repository root
 cursor = connection.cursor()
 
 cell_types = ["b_cell", "cd8_t_cell", "cd4_t_cell", "nk_cell", "monocyte"]

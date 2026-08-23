@@ -5,7 +5,7 @@ import os
 script_path = os.path.abspath(__file__)
 os.chdir(os.path.dirname(script_path)) # this script will be located at the root, so files are created relative to that
 
-connection = sqlite3.connect("data/patient_data.db")
+connection = sqlite3.connect("patient_data.db") # must be located in the repository root
 cursor = connection.cursor()
 
 # if previously ran, delete tables so this can be run multiple times with no issue
