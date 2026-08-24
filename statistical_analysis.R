@@ -182,9 +182,9 @@ run_statistical_tests <- function(df, outdir, parametric, adjust = "bonferroni")
         test_result <- group_data |>
           t_test(percentage ~ response) # implicit: alternative = "two.sided", mu = 0
         p_val <- test_result$p
-      } else { # else use Mann-Whitney U tests (less powerful but doesn't assume the data is normal)
+      } else { # else use Mann-Whitney U tests, AKA Wilcoxon rank-sum test (less powerful but doesn't assume the data is normal)
         test_result <- group_data |>
-          wilcox_test(percentage ~ response) # implicit: alternative = "two.sided", mu = 0
+          wilcox_test(percentage ~ response) # implicit: alternative = "two.sided", mu = 0. paired=FALSE by default, so it's NOT the Wilcoxon signed-rank test.
         p_val <- test_result$p
       }
       

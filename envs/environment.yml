@@ -20,3 +20,4 @@ dependencies:
   - r-tidyverse
   - nextflow==26.04.0
   - r-dt
+  - r-base64enc

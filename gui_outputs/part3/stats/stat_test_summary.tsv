@@ -1,0 +1,6 @@
+group	p_value	n	p_adj	are_groups_different
+b_cell	0.171	1968	0.855	FALSE
+cd4_t_cell	0.00501	1968	0.02505	TRUE
+cd8_t_cell	0.768	1968	1	FALSE
+monocyte	0.466	1968	1	FALSE
+nk_cell	0.193	1968	0.965	FALSE
