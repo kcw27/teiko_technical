@@ -1,4 +1,4 @@
-group	p_value	n	p_adj	normality_ok	size_above_threshold
+group	p_value	n	p_adj	normality_ok	n_above_threshold
 b_cell no	0.000603646062350448	424	0.00603646062350448	FALSE	TRUE
 b_cell yes	5.93543006513347e-10	485	5.93543006513347e-09	FALSE	TRUE
 cd4_t_cell no	0.195413423885593	424	1	TRUE	TRUE

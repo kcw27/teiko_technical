@@ -137,7 +137,7 @@ parametric_ok <- function(df, outdir, threshold=30, trust_CLT = TRUE, adjust = "
   p_threshold = 0.05
   summary_df <- summary_df |>
     mutate(normality_ok = p_adj >= p_threshold) |>
-    mutate(size_above_threshold = n >= threshold)
+    mutate(n_above_threshold = n >= threshold)
   
   out_table <- paste(outdir, "normality_summary.tsv", sep="/") 
   summary_df |> 
@@ -150,7 +150,7 @@ parametric_ok <- function(df, outdir, threshold=30, trust_CLT = TRUE, adjust = "
   if (trust_CLT) {
     print("Even if data is non-normal, trust that the Central Limit Theorem will allow for valid parametric test results.")
     print("Please check QQ plots to confirm that the data is not extremely non-normal")
-    if (any(!summary_df$size_above_threshold)) {
+    if (any(!summary_df$n_above_threshold)) {
       print("At least one group is not large enough to overlook normality constraints")
       return(FALSE)
     } else {
