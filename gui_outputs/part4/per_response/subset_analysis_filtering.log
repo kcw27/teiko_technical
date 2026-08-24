@@ -1,0 +1,8 @@
+Filtering criteria:
+treatment == miraclib
+condition == melanoma
+sample_type == PBMC
+time_from_treatment_start == 0
+
+Grouping variable:
+response

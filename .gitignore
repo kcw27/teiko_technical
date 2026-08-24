@@ -1,5 +1,5 @@
 .Rhistory
 .nextflow
-**.log*
+.nextflow.log*
 work/
 .conda_env_created

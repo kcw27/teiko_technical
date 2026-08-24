@@ -1,0 +1,6 @@
+Filtering criteria:
+condition == melanoma
+sex == M
+response == yes
+time_from_treatment_start == 0
+

@@ -1,0 +1,24 @@
+Filtering criteria:
+condition == melanoma
+treatment == miraclib
+sample_type == PBMC
+
+--- parametric_ok() console output ---
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/b_cell_no.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/b_cell_yes.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/cd4_t_cell_no.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/cd4_t_cell_yes.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/cd8_t_cell_no.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/cd8_t_cell_yes.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/monocyte_no.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/monocyte_yes.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/nk_cell_no.png"
+[1] "QQ plot saved to /home/kcw2/yard/teiko_technical/gui_outputs/part3/stats/qqplots/nk_cell_yes.png"
+ [1] 2.774027e-08 4.947486e-11 1.000000e+00 7.449811e-02 3.299498e-02
+ [6] 1.765950e-02 1.744328e-01 1.203772e-06 1.404934e-05 7.375080e-07
+[1] "Even if data is non-normal, trust that the Central Limit Theorem will allow for valid parametric test results."
+[1] "Please check QQ plots to confirm that the data is not extremely non-normal"
+
+adjust_method: bonferroni
+threshold: 30
+trust_CLT: TRUE

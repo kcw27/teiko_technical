@@ -1,0 +1,5 @@
+Filtering criteria:
+condition == melanoma
+treatment == miraclib
+sample_type == PBMC
+
