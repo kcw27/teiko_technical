@@ -1,8 +1,11 @@
 # teiko_technical
 Teiko Teiknical project.
 
-TODO: add table of contents
-
+Table of contents:
+- [Instructions](#instructions)
+- [Schema](#schema)
+- [Code overview](#code-overview)
+- [R Shiny dashboard images](#r-shiny-dashboard)
 ## Instructions
 Please cd to the root directory of the repository before running any code.  
 
@@ -28,7 +31,20 @@ To launch the dashboard (interactive analysis):
 make dashboard
 ```
 This first loads and summarizes the input data from the data/ dir in order to produce the database used by the dashboard, then launches the dashboard itself after printing the URL at which it can probably be found. (The IP address printed may or may not be correct. I have not tested this in GitHub Codespaces.) Example outputs may be found at gui_outputs/.
-TODO: add instructions on how to construct the dashboard URL  
+
+If for whatever reason you cannot see the URL in the console, please follow these instructions.
+1. Get your IP address.
+   ```bash
+   hostname -I
+   ```
+2. Launch the GUI in the terminal.
+   ```bash
+   make dashboard
+   ```  
+3. Replace \<server-ip\> with your IP address, and open the link in a web browser. The GUI webpage will be ready when the terminal reads "Listening on http://0.0.0.0:3838". 
+   ```text
+   http://<server-ip>:3838
+   ``` 
 
 I am sure that it is possible to use a sentinel file to track whether the database has already been prepared (by either make pipeline or make dashboard) so as to avoid setting it up every time the pipeline is run or the dashboard is opened, but that has yet to be implemented. In the meantime, if you would like to avoid redundant database preparation, you may use this:
 ```
@@ -68,7 +84,7 @@ I used nextflow.config to provide input files for the specific analyses that the
 I set it up so that the user can run as many analyses on the same dataset in a single run as they would like, rather than limiting it to one set of input files per run. The input files (filtering_criteria.csv and grouping_variable.txt) should end with an empty line or else R will complain that the files are malformed. Even if R issues that warning, though, it seems to process the data just fine.
 
 ### R Shiny dashboard
-The dashboard has three tab, which represent parts 2, 3, and 4 respectively. Here are some development notes.
+The dashboard has three tabs, which represent parts 2, 3, and 4 respectively. Here are some development notes.
 * For the sake of simplicity (at some cost to flexibility), all filtering statements are phrased as "variable == value" and joined together with "AND". I considered implementing the ability to filter by numeric range for the age column.
 * I avoided loading the entire database into memory. Parts of the tables are joined and pulled into memory only as necessary, e.g. to display the next 100 rows or to filter the df for analysis/download. It displays how many rows the table has at any given state of filtering so that the user gets a sense of whether their request is reasonable or not. Nothing will prevent the user from downloading the entire joined table as a CSV, but if the user sees that it has a large number of rows, that kind of behavior will be discouraged.  
 * The filtering menu allows the user to freely add, remove, and reset filtering steps. I drew inspiration from a dashboard I had previously developed- I only allowed the user to add filtering steps and to completely reset them, so it was an annoyance whenever I made a mistake and only needed to undo one filtering step.  
@@ -77,4 +93,18 @@ The dashboard has three tab, which represent parts 2, 3, and 4 respectively. Her
 * To facilitate opening the dashboard in a web browser, R prints the (probable) URL to the terminal. I cannot guarantee that this URL will work 100% of the time, but it has worked when I've tested it.
 
 #### Dashboard images
-TODO: insert images
+##### Tab 1: data overview
+<img width="2496" height="1476" alt="image" src="https://github.com/user-attachments/assets/a98ebdb0-a7e9-4347-a521-0bf7339e7caa" />
+<img width="2496" height="1459" alt="image" src="https://github.com/user-attachments/assets/07dc3ec6-44cb-41dc-805c-6574c948ecc7" />
+
+##### Tab 2: statistical analysis
+Once again: I wish I had implemented the ability to choose between numeric variables from a dropdown window, but it should be easy enough to add that feature.
+<img width="2496" height="1462" alt="image" src="https://github.com/user-attachments/assets/f88d6448-9651-4a1b-aa51-26c252f48926" />
+<img width="2496" height="2769" alt="image" src="https://github.com/user-attachments/assets/1a884dd9-b091-401b-a1ef-5a4c0e01b07b" />
+<img width="2492" height="1462" alt="image" src="https://github.com/user-attachments/assets/0ba43db0-f0ed-4443-bd1f-d98a45d79dc7" />
+
+##### Tab 3: subset analysis
+<img width="2496" height="658" alt="image" src="https://github.com/user-attachments/assets/11c9502c-5641-4839-9574-6c6125341350" />
+
+
+
